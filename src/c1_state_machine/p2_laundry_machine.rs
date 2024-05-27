@@ -40,7 +40,51 @@ impl StateMachine for ClothesMachine {
     type Transition = ClothesAction;
 
     fn next_state(starting_state: &ClothesState, t: &ClothesAction) -> ClothesState {
-        todo!("Exercise 3")
+
+        if *starting_state == ClothesState::Tattered {
+            return ClothesState::Tattered;
+        }
+
+        match (starting_state, t) {
+            (ClothesState::Clean(x), ClothesAction::Wear) => {
+                return transition_state(x - 1, ClothesState::Dirty);
+            },
+            (ClothesState::Clean(x), ClothesAction::Wash) => {
+                return transition_state(x - 1, ClothesState::Wet);
+            },
+            (ClothesState::Clean(x), ClothesAction::Dry) => {
+                return transition_state(x - 1, ClothesState::Clean);
+            },
+            (ClothesState::Dirty(x), ClothesAction::Wear) => {
+                return transition_state(x - 1, ClothesState::Dirty);
+            },
+            (ClothesState::Dirty(x), ClothesAction::Wash) => {
+                return transition_state(x - 1, ClothesState::Wet);
+            },
+            (ClothesState::Dirty(x), ClothesAction::Dry) => {
+                return transition_state(x - 1, ClothesState::Dirty);
+            },
+            (ClothesState::Wet(x), ClothesAction::Wear) => {
+                return transition_state(x - 1, ClothesState::Dirty);
+            },
+            (ClothesState::Wet(x), ClothesAction::Wash) => {
+                return transition_state(x - 1, ClothesState::Wet);
+            },
+            (ClothesState::Wet(x), ClothesAction::Dry) => {
+                return transition_state(x - 1, ClothesState::Clean);
+            },
+            (ClothesState::Tattered, _) => {
+                return ClothesState::Tattered;
+            }
+        }
+    }
+}
+
+fn transition_state(current_count: u64, next_state: fn(u64) -> ClothesState) -> ClothesState {
+    if current_count == 0 {
+        ClothesState::Tattered
+    } else {
+        next_state(current_count)
     }
 }
 
