@@ -174,6 +174,6 @@ fn bc_1_verify_chain_length_five() {
 fn bc_1_invalid_chain_is_really_invalid() {
     // This test chooses to use the student's own verify function.
     // This should be relatively safe given that we have already tested that function.
-    let invalid_chain = build_an_invalid_chain();
+    let invalid_chain: Vec<Header> = build_an_invalid_chain();
     assert!(!invalid_chain[0].verify_sub_chain(&invalid_chain[1..]))
 }
